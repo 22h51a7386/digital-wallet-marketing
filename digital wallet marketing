@@ -1,0 +1,54 @@
+# Sample Input
+sample_input = """4
+1 9000
+2 3000
+3 7500
+4 2000
+5
+1 2 1000
+3 4 3000
+2 3 500
+4 1 7500
+1 4 1500"""
+
+# Simulate the input function with sample input
+input_data = sample_input.split('\n')
+input_iterator = iter(input_data)
+input = lambda: next(input_iterator)
+
+# Dictionary to store user balances
+user_balances = {}
+
+# Reading user data
+N = int(input())
+for _ in range(N):
+    userID, balance = map(int, input().split())
+    user_balances[userID] = balance
+
+# Read the number of transactions
+T = int(input())
+
+# Process each transaction
+transaction_results = []
+for _ in range(T):
+    from_userID, to_userID, amount = map(int, input().split())
+
+    # Check if the from_userID has enough balance to make the transfer
+    if user_balances[from_userID] >= amount:
+        user_balances[from_userID] -= amount
+        user_balances[to_userID] += amount
+        transaction_results.append("Success")
+    else:
+        transaction_results.append("Failure")
+
+# Sort users based on their leftover balance in ascending order
+sorted_users = sorted(user_balances.items(), key=lambda x: x[1])
+
+# Collect the results
+output_result = "\n".join(transaction_results)
+sorted_users_result = "\n".join(f"{userID} {balance}" for userID, balance in sorted_users)
+
+# Print the transaction results, then a gap, then the sorted users' balances
+print(output_result)
+print()  # This adds a blank line as a gap
+print(sorted_users_result)
